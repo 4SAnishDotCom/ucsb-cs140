@@ -61,7 +61,24 @@ int  sum_avx(int n, int *arr) {
     // __m256i is the data type for 256-bit AVX integer registers (8 x 32-bit integers)
     __m256i vec_sum = _mm256_setzero_si256(); // Initialize vector accumulator to 0
     int  final_sum = 0;
-    // Your solution    
+    for(int i = 0; i < n/8*8; i = i+8){
+        __m256i temp = _mm256_loadu_si256((__m256i *)(arr +i));
+        vec_sum = _mm256_add_epi32(vec_sum, temp);
+
+    }    
+
+    int s8[8] __attribute__ ((aligned(32)));
+    _mm_storeu_si256(s8, vec_sum);
+    for(int i=0; i < 8; i++){
+        final_sum += s8[i];
+    }
+
+    for(int i = n/8*8; i <n; i++){
+        final_sum += arr[i];
+    }
+
+    return final_sum;
+
 
     // Loop through the array in chunks of 8 elements
         // Load 8 UNALIGNED 32-bit integers from memory into a register
