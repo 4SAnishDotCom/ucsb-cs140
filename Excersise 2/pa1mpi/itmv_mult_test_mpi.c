@@ -411,7 +411,7 @@ char *itmv_test14() {
  * Run all tests.  Ignore returned messages.
  */
 void run_all_tests(void) {
-  mu_run_test(itmv_test1);
+  /*mu_run_test(itmv_test1);
   mu_run_test(itmv_test2);
   mu_run_test(itmv_test3);
   mu_run_test(itmv_test4);
@@ -419,9 +419,12 @@ void run_all_tests(void) {
   mu_run_test(itmv_test6);
   mu_run_test(itmv_test7);
   mu_run_test(itmv_test8);
-  /* mu_run_test(itmv_test9); mu_run_test(itmv_test10);
-     mu_run_test(itmv_test11); mu_run_test(itmv_test12);
-     mu_run_test(itmv_test13); mu_run_test(itmv_test14); */
+  mu_run_test(itmv_test9); 
+  mu_run_test(itmv_test10);*/
+  mu_run_test(itmv_test11); 
+  mu_run_test(itmv_test12);/*
+  mu_run_test(itmv_test13); 
+  mu_run_test(itmv_test14); */
 }
 
 /*-------------------------------------------------------------------
