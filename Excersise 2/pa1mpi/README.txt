@@ -35,3 +35,12 @@ work distribution scheme. Instead of assigning contiguous blocks of rows to each
 processes so that each process receives a mix of rows with both high and low computational cost. This approach helps balance the workload 
 more evenly, reduces idle time, and improves overall parallel efficiency. By adopting round robin scheduling, the performance gap between 
 the normal and upper triangular matrix cases can be reduced, leading to better utilization of available cores.
+
+Report for 3
+When compiled with -O the naive sume takes 4910 microseconds and 2.04 GFLOPS, SSE-128 takes 2349.6667 microseconds and 4.26 GFLOPS, the AVX-256 takes
+2078.3333 microseconds and 4.81 GFLOPS. The naive sum is substantially slower since there is no optimization here as -O doesnt auto vectorize, so the 
+parallel implementations we implement in the other 2 sums make a difference by doing more work in less time. In -O3 though, Naive sum takes 2279.6667 microseconds and 4.39 GFLOPS
+SSE-128 sum takes 2704.3333 microseocnds and 3.70 GFLOPS and the AVX-256 takes 2302 microseconds and 4.34 GFLOPS. The naive solution is not the slowest now since
+-O3 automatically vectorizes now in its optimization, therefore the naive sum turns into SIMD. Since we have manually SIMD in the SSE-128 this conflicts with
+the autovectorization resulting in a slower run time. In both scenarios AVX-256 is the fastest  since it vectorizes more (even more than -O3 which might vectorize more
+conservatively as opposed to 8 integers).
