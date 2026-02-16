@@ -68,7 +68,7 @@ int  sum_avx(int n, int *arr) {
     }    
 
     int s8[8] __attribute__ ((aligned(32)));
-    _mm_storeu_si256(s8, vec_sum);
+    _mm256_storeu_si256(s8, vec_sum);
     for(int i=0; i < 8; i++){
         final_sum += s8[i];
     }
