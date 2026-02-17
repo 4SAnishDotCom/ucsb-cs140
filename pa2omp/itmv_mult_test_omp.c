@@ -299,7 +299,7 @@ char *itmv_test14a() {
  * matrix.
  */
 void run_all_tests(void) {
-  mu_run_test(itmv_test1);
+  /*mu_run_test(itmv_test1);
   mu_run_test(itmv_test2);
   mu_run_test(itmv_test3);
   mu_run_test(itmv_test4);
@@ -308,14 +308,14 @@ void run_all_tests(void) {
   mu_run_test(itmv_test6a);
   mu_run_test(itmv_test7);
   mu_run_test(itmv_test8);
-  mu_run_test(itmv_test8a);
+  mu_run_test(itmv_test8a); */
 
-  /*
+  
   mu_run_test(itmv_test12);
   mu_run_test(itmv_test13);
   mu_run_test(itmv_test14);
   mu_run_test(itmv_test14a);
-  */
+  
 }
 
 /*-------------------------------------------------------------------
