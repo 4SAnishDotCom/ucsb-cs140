@@ -11,6 +11,14 @@ Report
 ----------------------------------------------------------------------------
 1. How is the code parallelized? Show your solution by listing the key computation parallelized with
   OpenMP and related code. 
+
+  The code is parallelized using OpenMP by distributing the outer loop that computes each row of the matrix vector
+   multiplication across multiple threads. Each iteration computes one row of the result vector, and since each row is 
+   independent, they can execute concurrently without data races. The parallelization is implemented using a pragma omp 
+   parallel for directive with different scheduling policies depending on the mapping type. Static scheduling corresponds 
+   to block mapping. Static scheduling with a chunk size corresponds to block cyclic mapping. Dynamic scheduling with a 
+   chunk size corresponds to dynamic mapping. After computing the new vector y, a second parallel loop copies vector y into
+  vector x to complete each iteration of the algorithm.
   parallelized portion of the code is attatched below: 
 
  omp_set_num_threads(threadcnt);
