@@ -1,5 +1,0 @@
-Test 12: n=4K t=1K upper block mapping: Latency = 7.690359 sec and 2.2345 GFLOPS with 2 threads. Matrix dimension 4096 
-Test 13: n=4K t=1K upper block cylic (r=1): Latency = 5.885889 sec and 2.9195 GFLOPS with 2 threads. Matrix dimension 4096 
-Test 14: n=4K t=1K upper block cyclic(r=16): Latency = 5.838926 sec and 2.9430 GFLOPS with 2 threads. Matrix dimension 4096 
-Test 14a: n=4K t=1K upper dynamic(r=16): Latency = 5.938834 sec and 2.8935 GFLOPS with 2 threads. Matrix dimension 4096 
-Summary: Failed 0 out of 4 tests
