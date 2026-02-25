@@ -23,7 +23,7 @@
 
 pthread_barrier_t mybarrier; /*It will be initailized at itmv_mult_test_pth.c*/
 
-
+int global_stop = 1;
 /*---------------------------------------------------------------------
  * Function:            mv_compute
  * Purpose:             Compute  y[i]=d[i]+A[i]x for i-th element of vector y
@@ -79,7 +79,29 @@ void mv_compute(int i) {
  *            double vector_y[]:  vector y
  */
 void work_block(long my_rank) {
-  /*Your solution*/
+  int blocksize = ceil((double)matrix_dim / thread_count);
+  int row_start = blocksize*my_rank;
+  int row_end = blocksize*(my_rank+1)-1;
+
+  if (my_rank == thread_count-1) row_end = matrix_dim-1;
+  if (my_rank == 0) global_stop = 1;
+
+  for (int k = 0; k < no_iterations; k++) {
+    pthread_barrier_wait(&mybarrier);
+
+    for (int i = row_start; i <= row_end ; i++) {
+      mv_compute(i);
+      double err = fabs(vector_x[i]-vector_y[i]); 
+      if (err > ERROR_THRESHOLD) global_stop = 0; 
+    }
+
+    pthread_barrier_wait(&mybarrier);
+
+    if (global_stop) break; 
+
+    for (int i = row_start; i <= row_end; i++) vector_x[i] = vector_y[i];
+  } 
+
 }
 
 /*---------------------------------------------------------------------
@@ -107,8 +129,29 @@ void work_block(long my_rank) {
  *            double vector_y[]:  vector y
  */
 void work_blockcyclic(long my_rank) {
-  /*Your solution*/
+  if (my_rank == 0) global_stop = 1;
+
+  for (int k = 0; k < no_iterations; k++) {
+    pthread_barrier_wait(&mybarrier);
+
+    for (int i = 0; i < matrix_dim; i++) {
+      if ((i / cyclic_blocksize) % thread_count == my_rank) {
+        mv_compute(i);
+        double err = fabs(vector_x[i]-vector_y[i]); 
+        if (err > ERROR_THRESHOLD) global_stop = 0; 
+      }
+    }
+
+    pthread_barrier_wait(&mybarrier);
+
+    if (global_stop) break; 
+
+    for (int i = 0; i < matrix_dim; i++) {
+      if ((i / cyclic_blocksize) % thread_count == my_rank) vector_x[i] = vector_y[i];
+    }
+  } 
 }
+
 
 /*-------------------------------------------------------------------
  * Function:  itmv_mult_seq
