@@ -1,0 +1,6 @@
+Test 12: n=4K t=1K upper block mapping: Latency = 12.772894 sec with 1 threads. Matrix dimension 4096 
+Test 13: n=4K t=1K upper block cylic (r=1): Latency = 13.109694 sec with 1 threads. Matrix dimension 4096 
+Test 14: n=4K t=1K upper block cyclic(r=16): Latency = 13.027138 sec with 1 threads. Matrix dimension 4096 
+Summary: Failed 0 out of 3 tests
+/cm/local/apps/slurm/var/spool/job46766123/slurm_script: line 18: ./itmv_mult_test_pth: No such file or directory
+/cm/local/apps/slurm/var/spool/job46766123/slurm_script: line 19: ./itmv_mult_test_pth: No such file or directory
