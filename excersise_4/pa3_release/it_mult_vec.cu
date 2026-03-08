@@ -28,6 +28,8 @@ void mult_vec_async(int n, int rows_per_thread, int num_async_iter, float *y, fl
 #endif
   int idx=0; /*Assign a linearized thread ID, so I can be responsible for some rows*/
   /*Your solution to compute idx */
+  idx = threadIdx.x + blockIdx.x * blockDim.x;
+  /* End of Your solution*/
 
   for (int i = 0; i < rows_per_thread; i++) {
     int row_index = idx * rows_per_thread + i;
@@ -36,6 +38,15 @@ void mult_vec_async(int n, int rows_per_thread, int num_async_iter, float *y, fl
   for (int k = 0; k < num_async_iter; k++) {
     /*Perform asynchronous Gauss-Seidel method for y=d+Ay*/
     /*Your solution*/
+    for (int i = 0; i < rows_per_thread; i++) {
+      int row_index = idx * rows_per_thread + i;
+      float sum = d[row_index];
+      for (int j = 0; j < n; j++) {
+        sum += A[row_index*n + j] * y[j];
+      }
+      y[row_index] = sum;
+    }
+    /* End of Your solution*/
 
 
 #ifdef DEBUG1
@@ -67,7 +78,8 @@ void mult_vec(int n, int rows_per_thread, float *y, float *d, float *A,
               float *x, float *diff) {
   int idx=0; /*Assign a linearized thread ID, which will be used to determine what I own*/ 
   /*Your solution to compute idx */ 
-  
+  idx = threadIdx.x + blockIdx.x * blockDim.x;
+  /* End of Your solution*/
 
   for (int i = 0; i < rows_per_thread; i++) {
     int row_index = idx * rows_per_thread + i;
@@ -128,6 +140,18 @@ int it_mult_vec(int N,
 
   /*Allocate device global space for matrix A. Copy  data to the device global memory*/
   /*Your solution*/
+  result = cudaMalloc( (void **) &A_d, A_size);
+  if (result) {
+    printf("Error in cudaMalloc. Error code is %d.\n", result);
+    return -1;
+  }
+
+  result = cudaMemcpy(A_d, A, A_size, cudaMemcpyHostToDevice);
+  if (result) {
+    printf("Error in cudaMemcpy. Error code is %d.\n", result);
+    return -1;
+  }
+  /* End of Your solution*/
   
   /*Allocate, and copy other  data to the device global memory*/
   result = cudaMalloc( (void **) &x_d, row_size);
@@ -176,6 +200,9 @@ int it_mult_vec(int N,
       k += NUM_ASYNC_ITER; //The above line already executes NUM_ASYNC_ITER iterations
     } else { /* call a kernel Jacobi method to compute y=d+Ax*/
       /*Your solution*/
+      mult_vec<<<num_blocks, threads_per_block>>>(
+          N, rows_per_thread, y_d, d_d, A_d, x_d, diff_d);
+      /*End of Your solution*/
       
      k++;
     }
@@ -201,6 +228,12 @@ int it_mult_vec(int N,
   }
   /*Copy the final solution vector y from device. */
   /*Your solution*/
+  result = cudaMemcpy(y, y_d, row_size, cudaMemcpyDeviceToHost);
+  if (result) {
+    printf("Error in cudaMemcpy for y's final device value. Error code is %d.\n", result);
+    return -1;
+  }
+  /* End of Your solution*/
 
   cudaFree(A_d);
   cudaFree(x_d);
